@@ -80,16 +80,6 @@ configure_spell_highlights()
 require("lazy").setup({
 	spec = {
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins" },
-		{ "github/copilot.vim" },
-		{
-			"CopilotC-Nvim/CopilotChat.nvim",
-			commit = "451d365928a994cda3505a84905303f790e28df8",
-			dependencies = {
-				{ "github/copilot.vim" },
-				{ "nvim-lua/plenary.nvim" },
-			},
-			opts = {},
-		},
 		{ "folke/noice.nvim", event = "VeryLazy", opts = { }, dependencies = { } },
 			{ "neovim/nvim-lspconfig" },
 			{
