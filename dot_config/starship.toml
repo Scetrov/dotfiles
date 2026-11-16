@@ -17,17 +17,19 @@ $directory\
 $git_branch\
 $git_status\
 $status\
-$line_break\
-$character"""
-
-right_format = """
+$fill\
 $shell\
 $kubernetes\
 $azure\
 $rust\
 $nodejs\
 $dotnet\
-$cmd_duration"""
+$cmd_duration\
+$line_break\
+$character"""
+
+[fill]
+symbol = " "
 
 [palettes.tokyo_night]
 background = "#1a1b26"
