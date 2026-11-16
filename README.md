@@ -60,6 +60,20 @@ Verify inside a `pi` session by running:
 ctx stats
 ```
 
+### Gondolin Micro-VM Sandboxing (`pi-gondolin-mount`)
+
+`npm:pi-gondolin-mount` (`abobco/pi-gondolin-mount`) routes `pi` tool calls (`bash`, `read`, `write`, `edit`) and `!` shell commands into an ephemeral Gondolin Linux micro-VM while keeping provider credentials on the host.
+
+Requires QEMU (`qemu-system-x86` and `qemu-img` on Arch Linux):
+
+```bash
+sudo pacman -S qemu-system-x86 qemu-img
+pi install npm:pi-gondolin-mount
+```
+
+- By default, the current working directory is mounted read-write at `/workspace`.
+- Add a `pi-gondolin-mount-config.yml` in a project directory to mount extra host paths using `<host-dir>:<guest-dir>:<ro|rw>` syntax (automatically masked inside the VM).
+
 ---
 
 ## Recent Changes (2026-11-13 to 2026-11-16)
@@ -91,3 +105,4 @@ ctx stats
 - **2026-11-16:**
   - **Secrets & linting:** `gitleaks`, `pre-commit`
   - **JS/TS & AI tooling:** `pnpm`, `yarn`, `bun`, `ggml`, `llama-cpp`, `antigravity`
+  - **Virtualization & sandboxing:** `qemu-system-x86`, `qemu-img` (for Gondolin micro-VMs)
