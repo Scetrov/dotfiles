@@ -1,0 +1,28 @@
+{
+  "packages": [
+    "git:github.com/richards-ensono/pi-openspec-status",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:@narumitw/pi-usage",
+    "npm:@tmustier/pi-usage-extension",
+    "npm:context-mode",
+    "npm:pi-simplify",
+    "npm:pi-subagents",
+    "npm:pi-web-access"
+  ],
+  "lastChangelogVersion": "1.5.2",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:@narumitw/pi-usage\",\"scope\":\"user\"}": "0.69.3",
+    "{\"source\":\"npm:@tmustier/pi-usage-extension\",\"scope\":\"user\"}": "0.10.2",
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.88.1",
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.48.0"
+  },
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6.1-sol",
+  "enabledModels": [
+    "openai-codex/gpt-6.1-sol",
+    "openai-codex/gpt-6-astra",
+    "openai-codex/gpt-6-luna",
+    "openai-codex/gpt-6.1-terra"
+  ]
+}
