@@ -13,17 +13,17 @@ $hostname\
 $os\
 [](fg:selection bg:blue)\
 $directory\
-[](fg:blue) \
+[](fg:blue)\
 $git_branch\
 $git_status\
 $status\
 $fill\
-$shell\
 $kubernetes\
 $azure\
 $rust\
 $nodejs\
 $dotnet\
+$shell\
 $cmd_duration\
 $line_break\
 $character"""
@@ -84,13 +84,13 @@ repo_root_format = "[   $before_root_path]($style)[$repo_root]($repo_root_sty
 [git_branch]
 symbol = " "
 style = "bg:yellow fg:background"
-format = "[](fg:yellow)[ $symbol$branch]($style)"
+format = "[](fg:background bg:yellow)[ $symbol$branch]($style)"
 truncation_length = 20
 truncation_symbol = ".."
 
 [git_status]
 style = "bg:yellow fg:background"
-format = '([ $all_status$ahead_behind]($style))[ ](bg:yellow)[](fg:yellow) '
+format = '([ $all_status$ahead_behind]($style))[ ](bg:yellow)[](fg:yellow)'
 conflicted = "=$count"
 ahead = "⇡$count"
 behind = "⇣$count"
@@ -105,8 +105,8 @@ deleted = "✘$count"
 
 [status]
 disabled = false
-symbol = '[](fg:red)[   ](bg:red fg:black)[](fg:red)'
-success_symbol = '[](fg:green)[   ](bg:green fg:background)[](fg:green)'
+symbol = '[](fg:background bg:red)[   ](bg:red fg:black)[](fg:red)'
+success_symbol = '[](fg:background bg:green)[   ](bg:green fg:background)[](fg:green)'
 style = ""
 format = '[$symbol]($style)'
 
@@ -118,30 +118,30 @@ format = '[](fg:blue)[   $indicator ]($style)'
 [kubernetes]
 disabled = false
 style = "bg:selection fg:foreground"
-format = '[](fg:selection)[ 󱃾 $context( :: $namespace) ]($style)'
+format = '[](fg:selection)[ 󱃾 $context( :: $namespace) ]($style)[](fg:selection) '
 
 [azure]
 disabled = false
 style = "bg:teal fg:black"
-format = '[](fg:teal)[  $subscription ]($style)'
+format = '[](fg:teal)[  $subscription ]($style)[](fg:teal) '
 
 [rust]
 style = "bg:orange fg:black"
-format = '[](fg:orange)[  $version ]($style)'
+format = '[](fg:orange)[  $version ]($style)[](fg:orange) '
 
 [nodejs]
 style = "bg:green fg:black"
-format = '[](fg:green)[  $version ]($style)'
+format = '[](fg:green)[  $version ]($style)[](fg:green) '
 
 [dotnet]
 style = "bg:blue fg:black"
-format = '[](fg:blue)[  $version ]($style)'
+format = '[](fg:blue)[  $version ]($style)[](fg:blue) '
 
 [cmd_duration]
 min_time = 0
 show_milliseconds = false
 style = "bg:magenta fg:background"
-format = '[](fg:magenta)[  $duration ]($style)[](fg:magenta)'
+format = '[](fg:magenta bg:blue)[  $duration ]($style)[](fg:magenta)'
 
 [character]
 success_symbol = "[ ~](magenta)"
