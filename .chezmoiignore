@@ -3,5 +3,4 @@ README.md
 {{- if ne .chezmoi.os "linux" }}
 .config/hypr
 .config/omarchy
-.config/environment.d
 {{- end }}
