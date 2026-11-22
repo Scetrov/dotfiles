@@ -1,0 +1,485 @@
+{
+    "controllers": [
+        {
+            "active_mode": 0,
+            "colors": [
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16711935,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16711935,
+                16711935,
+                16776960,
+                16776960,
+                16711935,
+                16711935,
+                16776960,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16711935,
+                16776960,
+                16776960,
+                16711935,
+                16711935,
+                16776960,
+                16776960,
+                16711935,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960,
+                16776960
+            ],
+            "description": "Corsair K65 Mini Keyboard Device",
+            "display_name": "",
+            "flags": 1,
+            "leds": [
+                {
+                    "name": "Key: Escape"
+                },
+                {
+                    "name": "Key: Tab"
+                },
+                {
+                    "name": "Key: Caps Lock"
+                },
+                {
+                    "name": "Key: Left Shift"
+                },
+                {
+                    "name": "Key: Left Control"
+                },
+                {
+                    "name": "Key: 1"
+                },
+                {
+                    "name": "Key: \\ (ISO)"
+                },
+                {
+                    "name": "Key: Left Windows"
+                },
+                {
+                    "name": "Key: 2"
+                },
+                {
+                    "name": "Key: Q"
+                },
+                {
+                    "name": "Key: A"
+                },
+                {
+                    "name": "Key: Z"
+                },
+                {
+                    "name": "Key: Left Alt"
+                },
+                {
+                    "name": "Key: 3"
+                },
+                {
+                    "name": "Key: W"
+                },
+                {
+                    "name": "Key: S"
+                },
+                {
+                    "name": "Key: X"
+                },
+                {
+                    "name": "Key: 4"
+                },
+                {
+                    "name": "Key: E"
+                },
+                {
+                    "name": "Key: D"
+                },
+                {
+                    "name": "Key: C"
+                },
+                {
+                    "name": ""
+                },
+                {
+                    "name": "Key: 5"
+                },
+                {
+                    "name": "Key: R"
+                },
+                {
+                    "name": "Key: F"
+                },
+                {
+                    "name": "Key: V"
+                },
+                {
+                    "name": "Key: 6"
+                },
+                {
+                    "name": "Key: T"
+                },
+                {
+                    "name": "Key: G"
+                },
+                {
+                    "name": "Key: B"
+                },
+                {
+                    "name": "Key: Space"
+                },
+                {
+                    "name": "Key: 7"
+                },
+                {
+                    "name": "Key: Y"
+                },
+                {
+                    "name": "Key: H"
+                },
+                {
+                    "name": "Key: N"
+                },
+                {
+                    "name": "Key: 8"
+                },
+                {
+                    "name": "Key: U"
+                },
+                {
+                    "name": "Key: J"
+                },
+                {
+                    "name": "Key: M"
+                },
+                {
+                    "name": ""
+                },
+                {
+                    "name": "Key: 9"
+                },
+                {
+                    "name": "Key: I"
+                },
+                {
+                    "name": "Key: K"
+                },
+                {
+                    "name": "Key: ,"
+                },
+                {
+                    "name": "Key: 0"
+                },
+                {
+                    "name": "Key: O"
+                },
+                {
+                    "name": "Key: L"
+                },
+                {
+                    "name": "Key: ."
+                },
+                {
+                    "name": "Key: Right Alt"
+                },
+                {
+                    "name": "Key: -"
+                },
+                {
+                    "name": "Key: P"
+                },
+                {
+                    "name": "Key: ;"
+                },
+                {
+                    "name": "Key: /"
+                },
+                {
+                    "name": "Key: Right Fn"
+                },
+                {
+                    "name": "Key: ="
+                },
+                {
+                    "name": "Key: ["
+                },
+                {
+                    "name": "Key: '"
+                },
+                {
+                    "name": "Key: Menu"
+                },
+                {
+                    "name": "Key: ]"
+                },
+                {
+                    "name": "Key: #"
+                },
+                {
+                    "name": "Key: Backspace"
+                },
+                {
+                    "name": "Key: Enter (ISO)"
+                },
+                {
+                    "name": "Key: Right Shift"
+                },
+                {
+                    "name": "Key: Right Control"
+                }
+            ],
+            "location": "HID: /dev/hidraw3",
+            "modes": [
+                {
+                    "brightness": 0,
+                    "brightness_max": 0,
+                    "brightness_min": 0,
+                    "color_mode": 1,
+                    "colors_max": 0,
+                    "colors_min": 0,
+                    "direction": 0,
+                    "flags": 32,
+                    "name": "Direct",
+                    "speed": 0,
+                    "speed_max": 0,
+                    "speed_min": 0
+                }
+            ],
+            "name": "Corsair K65 Mini",
+            "serial": "F5001907605D6493AA3518670A019037",
+            "type": 5,
+            "vendor": "Corsair",
+            "version": "",
+            "zones": [
+                {
+                    "display_name": "",
+                    "flags": 0,
+                    "leds_count": 64,
+                    "leds_max": 64,
+                    "leds_min": 64,
+                    "matrix_map": {
+                        "height": 5,
+                        "map": [
+                            0,
+                            5,
+                            8,
+                            13,
+                            17,
+                            22,
+                            26,
+                            31,
+                            35,
+                            40,
+                            44,
+                            49,
+                            54,
+                            4294967295,
+                            60,
+                            1,
+                            4294967295,
+                            9,
+                            14,
+                            18,
+                            23,
+                            27,
+                            32,
+                            36,
+                            41,
+                            45,
+                            50,
+                            55,
+                            58,
+                            4294967295,
+                            2,
+                            4294967295,
+                            10,
+                            15,
+                            19,
+                            24,
+                            28,
+                            33,
+                            37,
+                            42,
+                            46,
+                            51,
+                            56,
+                            59,
+                            61,
+                            3,
+                            6,
+                            11,
+                            16,
+                            20,
+                            25,
+                            29,
+                            34,
+                            38,
+                            43,
+                            47,
+                            52,
+                            4294967295,
+                            4294967295,
+                            62,
+                            4,
+                            7,
+                            12,
+                            4294967295,
+                            21,
+                            4294967295,
+                            30,
+                            4294967295,
+                            39,
+                            4294967295,
+                            48,
+                            53,
+                            57,
+                            4294967295,
+                            63
+                        ],
+                        "width": 15
+                    },
+                    "name": "Keyboard",
+                    "type": 2
+                }
+            ]
+        },
+        {
+            "active_mode": 0,
+            "colors": [
+                16711935,
+                16776960,
+                16711935
+            ],
+            "description": "SteelSeries Mouse Device",
+            "display_name": "",
+            "flags": 1,
+            "leds": [
+                {
+                    "name": "Front"
+                },
+                {
+                    "name": "Middle"
+                },
+                {
+                    "name": "Rear"
+                }
+            ],
+            "location": "HID: /dev/hidraw11",
+            "modes": [
+                {
+                    "brightness": 100,
+                    "brightness_max": 100,
+                    "brightness_min": 0,
+                    "color_mode": 1,
+                    "colors_max": 0,
+                    "colors_min": 0,
+                    "direction": 0,
+                    "flags": 304,
+                    "name": "Direct",
+                    "speed": 0,
+                    "speed_max": 0,
+                    "speed_min": 0
+                },
+                {
+                    "brightness": 0,
+                    "brightness_max": 0,
+                    "brightness_min": 0,
+                    "color_mode": 0,
+                    "colors_max": 0,
+                    "colors_min": 0,
+                    "direction": 0,
+                    "flags": 256,
+                    "name": "Rainbow Breathing",
+                    "speed": 0,
+                    "speed_max": 0,
+                    "speed_min": 0
+                }
+            ],
+            "name": "SteelSeries Aerox 5 Wireless Wired",
+            "serial": "",
+            "type": 6,
+            "vendor": "SteelSeries",
+            "version": "",
+            "zones": [
+                {
+                    "display_name": "",
+                    "flags": 0,
+                    "leds_count": 1,
+                    "leds_max": 1,
+                    "leds_min": 1,
+                    "matrix_map": {
+                        "height": 0,
+                        "width": 0
+                    },
+                    "name": "Front",
+                    "type": 0
+                },
+                {
+                    "display_name": "",
+                    "flags": 0,
+                    "leds_count": 1,
+                    "leds_max": 1,
+                    "leds_min": 1,
+                    "matrix_map": {
+                        "height": 0,
+                        "width": 0
+                    },
+                    "name": "Middle",
+                    "type": 0
+                },
+                {
+                    "display_name": "",
+                    "flags": 0,
+                    "leds_count": 1,
+                    "leds_max": 1,
+                    "leds_min": 1,
+                    "matrix_map": {
+                        "height": 0,
+                        "width": 0
+                    },
+                    "name": "Rear",
+                    "type": 0
+                }
+            ]
+        }
+    ],
+    "profile_name": "Synthwave",
+    "profile_version": 6
+}
