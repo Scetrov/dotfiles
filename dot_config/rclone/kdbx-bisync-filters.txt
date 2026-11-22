@@ -1,0 +1,6 @@
+# Only sync HomePasswords.kdbx (and any bisync conflict copies) in the root of Google Drive.
+# Exclude all subdirectories and all other files so nothing else in My Drive is touched.
++ /HomePasswords.kdbx
++ /HomePasswords.kdbx.conflict*
+- */
+- *

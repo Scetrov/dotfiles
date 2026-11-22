@@ -76,7 +76,73 @@ pi install npm:pi-gondolin-mount
 
 ---
 
-## Recent Changes (2026-11-13 to 2026-11-16)
+## KeePassXC & Google Drive Sync (`rclone bisync`)
+
+Two-way synchronization of `HomePasswords.kdbx` between `~/Passwords/` and the root of Google Drive (`gdrive:`), keeping a real local copy for offline reliability and safe KeePassXC atomic saves.
+
+> **Secrets notice:** `~/.config/rclone/rclone.conf` is intentionally **not** tracked in this repository because it stores Google OAuth credentials (`client_id`, `client_secret`, and refresh `token`). Configure the `gdrive` remote once per machine.
+
+### Managed Files
+
+- `dot_local/bin/executable_kdbx-sync` → `~/.local/bin/kdbx-sync` — wrapper around `rclone bisync` with `flock` locking, 3s save debounce, SHA-256 loop prevention, local-only timestamped backups (retaining the 20 most recent in `~/.local/share/kdbx-backups/`), missing/empty local file guard, and conflict desktop notifications.
+- `dot_config/rclone/kdbx-bisync-filters.txt` → `~/.config/rclone/kdbx-bisync-filters.txt` — restricts bisync strictly to `/HomePasswords.kdbx` (and any `.conflict*` copies), ignoring all other Drive files/subfolders and KeePassXC `.lock`/`.tmp` files.
+- `dot_config/systemd/user/kdbx-sync.{service,timer}` → `~/.config/systemd/user/` — pulls/syncs every 5 minutes (and 30s after login).
+- `dot_config/systemd/user/kdbx-sync-watch.{service,path}` → `~/.config/systemd/user/` — watches `~/Passwords` and pushes local saves within ~3 seconds.
+
+### Setup on a New Machine (Arch / Omarchy)
+
+1. **Install packages:**
+
+   ```bash
+   omarchy pkg add rclone keepassxc qt5-wayland
+   # or on plain Arch:
+   # sudo pacman -S rclone keepassxc qt5-wayland
+   ```
+
+2. **Apply dotfiles:**
+
+   ```bash
+   chezmoi apply
+   ```
+
+3. **Authorize `rclone` with your Google Cloud OAuth app** (keeps credentials out of shell history):
+
+   ```bash
+   bash -c 'read -rp "Client ID: " CID && read -rsp "Client Secret: " CSEC && echo && rclone config create gdrive drive scope=drive client_id="$CID" client_secret="$CSEC"'
+   ```
+
+   - Answer **`n`** if prompted to configure as a Shared Drive (Team Drive).
+   - **Prevent 7-day token expiry:** In [Google Cloud Console](https://console.cloud.google.com/), open **Google Auth Platform → Audience** *(or **APIs & Services → OAuth consent screen**)* and set **Publishing status** to **In production** (click **Publish App**; full Google verification is not needed for personal use). During sign-in, click **Advanced → Go to `<app>` (unsafe) → Continue**. If you published after already authorizing, run `rclone config reconnect gdrive:` once.
+
+4. **Run the initial resync:**
+
+   ```bash
+   kdbx-sync --resync
+   ```
+
+5. **Enable background sync:**
+
+   ```bash
+   systemctl --user daemon-reload
+   systemctl --user enable --now kdbx-sync.timer kdbx-sync-watch.path
+   ```
+
+6. **Open in KeePassXC:** Open `~/Passwords/HomePasswords.kdbx` and ensure **Settings → General → Automatically reload the database when modified externally** is enabled.
+
+### Useful Commands
+
+```bash
+kdbx-sync                                                           # Manual two-way sync
+kdbx-sync --resync                                                  # Re-initialize bisync state
+rclone config reconnect gdrive:                                     # Refresh OAuth token
+journalctl --user -u kdbx-sync.service -u kdbx-sync-watch.service   # View sync logs
+```
+
+> **Conflict handling:** If the database is edited simultaneously on two devices, the newer version wins and the other is kept as `HomePasswords.kdbx.conflict*`. Use KeePassXC's **Database → Merge from Database...** to merge entries, then delete the `.conflict*` file.
+
+---
+
+## Recent Changes (2026-11-13 to 2026-11-22)
 
 ### Dotfiles & Config (`chezmoi`)
 
@@ -89,6 +155,8 @@ pi install npm:pi-gondolin-mount
   - Updated Starship prompt (`dot_config/starship.toml`) to a Tokyo Night single-line layout with connected powerline segments.
   - Adopted Oh My Tmux (`dot_config/tmux/tmux.conf` + `tmux.conf.local`) merged with Omarchy settings.
   - Added `pi` package configuration (`dot_pi/agent/settings.json`).
+- **2026-11-22:**
+  - Added KeePassXC + Google Drive `rclone bisync` script (`dot_local/bin/executable_kdbx-sync`), single-file filter (`dot_config/rclone/kdbx-bisync-filters.txt`), and `systemd --user` timer + save watcher units (`dot_config/systemd/user/kdbx-sync*`).
 
 ### OS Packages (`pacman`)
 

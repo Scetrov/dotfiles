@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodically sync HomePasswords.kdbx with Google Drive
+
+[Timer]
+OnStartupSec=30s
+OnUnitActiveSec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

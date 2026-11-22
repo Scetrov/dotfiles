@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch ~/Passwords for changes to HomePasswords.kdbx
+
+[Path]
+PathChanged=%h/Passwords
+Unit=kdbx-sync-watch.service
+
+[Install]
+WantedBy=default.target

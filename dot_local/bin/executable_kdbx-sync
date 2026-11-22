@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LOCAL_DIR="${KDBX_SYNC_DIR:-$HOME/Passwords}"
+DB_NAME="${KDBX_SYNC_FILE:-HomePasswords.kdbx}"
+DB_FILE="$LOCAL_DIR/$DB_NAME"
+REMOTE="${KDBX_SYNC_REMOTE:-gdrive:}"
+FILTERS_FILE="$HOME/.config/rclone/kdbx-bisync-filters.txt"
+BACKUP_DIR="$HOME/.local/share/kdbx-backups"
+STATE_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+LOCK_FILE="$STATE_DIR/kdbx-sync.lock"
+HASH_FILE="$STATE_DIR/kdbx-sync.last-hash"
+
+ON_CHANGE=false
+IS_RESYNC=false
+EXTRA_ARGS=()
+
+for arg in "$@"; do
+  case "$arg" in
+    --on-change)
+      ON_CHANGE=true
+      ;;
+    --resync|-1)
+      IS_RESYNC=true
+      EXTRA_ARGS+=("$arg")
+      ;;
+    *)
+      EXTRA_ARGS+=("$arg")
+      ;;
+  esac
+done
+
+mkdir -p "$LOCAL_DIR" "$BACKUP_DIR"
+
+# Prevent overlapping runs from timer, path watcher, or manual invocations
+if command -v flock &>/dev/null; then
+  exec 9>"$LOCK_FILE"
+  if ! flock -n 9; then
+    echo "kdbx-sync: another sync is already running, skipping."
+    exit 0
+  fi
+fi
+
+file_hash() {
+  if [[ -f "$DB_FILE" ]]; then
+    if command -v sha256sum &>/dev/null; then
+      sha256sum "$DB_FILE" | awk '{print $1}'
+    else
+      shasum -a 256 "$DB_FILE" | awk '{print $1}'
+    fi
+  else
+    echo ""
+  fi
+}
+
+if [[ "$ON_CHANGE" == true ]]; then
+  # Debounce KeePassXC atomic save (write temp -> rename)
+  sleep 3
+
+  # Wait briefly if KeePassXC still holds a lock file
+  for _ in 1 2 3 4 5; do
+    [[ ! -e "${DB_FILE}.lock" ]] && break
+    sleep 1
+  done
+
+  CURRENT_HASH="$(file_hash)"
+  LAST_HASH=""
+  if [[ -f "$HASH_FILE" ]]; then
+    read -r LAST_HASH < "$HASH_FILE" || true
+  fi
+
+  if [[ -n "$CURRENT_HASH" && "$CURRENT_HASH" == "$LAST_HASH" ]]; then
+    echo "kdbx-sync: $DB_NAME unchanged, skipping upload."
+    exit 0
+  fi
+fi
+
+# Safety guard: refuse to sync if local DB is missing or 0 bytes (unless --resync)
+if [[ "$IS_RESYNC" == false && ! -s "$DB_FILE" ]]; then
+  echo "kdbx-sync: ERROR: $DB_FILE is missing or empty; refusing to sync to protect remote copy." >&2
+  exit 1
+fi
+
+TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
+
+# --force is required for single-file bisync since modifying the 1 file changes 100% of tracked files.
+# Use a timestamped --backup-dir1 (local only) instead of global --suffix so Google Drive
+# updates the database in-place (preserving its Drive file ID & native revision history).
+rclone bisync "$LOCAL_DIR" "$REMOTE" \
+  --filters-file "$FILTERS_FILE" \
+  --compare size,modtime,checksum \
+  --conflict-resolve newer \
+  --conflict-loser num \
+  --resilient \
+  --recover \
+  --force \
+  --backup-dir1 "$BACKUP_DIR/$TIMESTAMP" \
+  --verbose \
+  "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
+
+# Record post-sync hash so remote downloads do not re-trigger the path watcher
+file_hash > "$HASH_FILE"
+
+# Keep only the 20 most recent local backup snapshots (YYYYMMDD-HHMMSS sorts chronologically)
+shopt -s nullglob
+BACKUPS=("$BACKUP_DIR"/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9])
+if (( ${#BACKUPS[@]} > 20 )); then
+  REMOVE_COUNT=$(( ${#BACKUPS[@]} - 20 ))
+  rm -rf -- "${BACKUPS[@]:0:$REMOVE_COUNT}"
+fi
+
+# Notify if any conflict copy exists
+CONFLICTS=("$LOCAL_DIR"/"$DB_NAME".conflict*)
+if (( ${#CONFLICTS[@]} > 0 )) && command -v notify-send &>/dev/null; then
+  notify-send -u critical "KeePassXC Sync Conflict" \
+    "Conflict copy detected in $LOCAL_DIR. Use KeePassXC Database -> Merge from Database to merge changes."
+fi
