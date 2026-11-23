@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenRGB headless server
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/openrgb --server --profile Synthwave
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target
