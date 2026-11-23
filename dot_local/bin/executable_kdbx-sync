@@ -4,7 +4,7 @@ set -euo pipefail
 LOCAL_DIR="${KDBX_SYNC_DIR:-$HOME/Passwords}"
 DB_NAME="${KDBX_SYNC_FILE:-HomePasswords.kdbx}"
 DB_FILE="$LOCAL_DIR/$DB_NAME"
-REMOTE="${KDBX_SYNC_REMOTE:-gdrive:}"
+REMOTE="${KDBX_SYNC_REMOTE:-gdrive:Passwords}"
 FILTERS_FILE="$HOME/.config/rclone/kdbx-bisync-filters.txt"
 BACKUP_DIR="$HOME/.local/share/kdbx-backups"
 STATE_DIR="${XDG_RUNTIME_DIR:-/tmp}"

@@ -78,14 +78,14 @@ pi install npm:pi-gondolin-mount
 
 ## KeePassXC & Google Drive Sync (`rclone bisync`)
 
-Two-way synchronization of `HomePasswords.kdbx` between `~/Passwords/` and the root of Google Drive (`gdrive:`), keeping a real local copy for offline reliability and safe KeePassXC atomic saves.
+Two-way synchronization of `HomePasswords.kdbx` between `~/Passwords/` and the `Passwords/` folder in Google Drive (`gdrive:Passwords`), keeping a real local copy for offline reliability and safe KeePassXC atomic saves.
 
 > **Secrets notice:** `~/.config/rclone/rclone.conf` is intentionally **not** tracked in this repository because it stores Google OAuth credentials (`client_id`, `client_secret`, and refresh `token`). Configure the `gdrive` remote once per machine.
 
 ### Managed Files
 
-- `dot_local/bin/executable_kdbx-sync` → `~/.local/bin/kdbx-sync` — wrapper around `rclone bisync` with `flock` locking, 3s save debounce, SHA-256 loop prevention, local-only timestamped backups (retaining the 20 most recent in `~/.local/share/kdbx-backups/`), missing/empty local file guard, and conflict desktop notifications.
-- `dot_config/rclone/kdbx-bisync-filters.txt` → `~/.config/rclone/kdbx-bisync-filters.txt` — restricts bisync strictly to `/HomePasswords.kdbx` (and any `.conflict*` copies), ignoring all other Drive files/subfolders and KeePassXC `.lock`/`.tmp` files.
+- `dot_local/bin/executable_kdbx-sync` → `~/.local/bin/kdbx-sync` — wrapper around `rclone bisync` with `flock` locking, 3s save debounce, SHA-256 loop prevention, local-only timestamped backups (retaining the 20 most recent in `~/.local/share/kdbx-backups/`), missing/empty local file guard, and conflict desktop notifications. Defaults can be overridden via `KDBX_SYNC_DIR` (`~/Passwords`), `KDBX_SYNC_FILE` (`HomePasswords.kdbx`), and `KDBX_SYNC_REMOTE` (`gdrive:Passwords`).
+- `dot_config/rclone/kdbx-bisync-filters.txt` → `~/.config/rclone/kdbx-bisync-filters.txt` — restricts bisync strictly to `/HomePasswords.kdbx` (and any `.conflict*` copies) inside `gdrive:Passwords/`, ignoring all other files/databases/subfolders in `Passwords/` and KeePassXC `.lock`/`.tmp` files.
 - `dot_config/systemd/user/kdbx-sync.{service,timer}` → `~/.config/systemd/user/` — pulls/syncs every 5 minutes (and 30s after login).
 - `dot_config/systemd/user/kdbx-sync-watch.{service,path}` → `~/.config/systemd/user/` — watches `~/Passwords` and pushes local saves within ~3 seconds.
 
@@ -136,13 +136,26 @@ kdbx-sync                                                           # Manual two
 kdbx-sync --resync                                                  # Re-initialize bisync state
 rclone config reconnect gdrive:                                     # Refresh OAuth token
 journalctl --user -u kdbx-sync.service -u kdbx-sync-watch.service   # View sync logs
+systemctl --user stop kdbx-sync.timer kdbx-sync-watch.path          # Pause background sync
+systemctl --user start kdbx-sync.timer kdbx-sync-watch.path         # Resume background sync
 ```
 
-> **Conflict handling:** If the database is edited simultaneously on two devices, the newer version wins and the other is kept as `HomePasswords.kdbx.conflict*`. Use KeePassXC's **Database → Merge from Database...** to merge entries, then delete the `.conflict*` file.
+### Multi-Device, Conflict & Duplicate Handling
+
+- **Canonical Drive path:** Point every KeePass client/device to **`My Drive/Passwords/HomePasswords.kdbx`** (not `My Drive` root and not Google Drive's **Computers** backup section, which `rclone` does not list).
+- **Google Drive duplicates:** Because Google Drive permits multiple files with the same name in a folder, `rclone` logs `Duplicate object found in destination - ignoring` if a second `HomePasswords.kdbx` is created alongside the original. Pause the systemd units before resolving duplicates.
+- **Merging diverged copies:** If a `.conflict*` file or backup copy in `~/.local/share/kdbx-backups/` diverges, preview and merge safely with KeePassXC (**Database → Merge from Database...**) or `keepassxc-cli`:
+
+  ```bash
+  keepassxc-cli merge -s -d <target.kdbx> <other.kdbx>   # Dry-run diff (read-only)
+  keepassxc-cli merge -s <target.kdbx> <other.kdbx>      # Merge changes (keeps history)
+  ```
+
+  After replacing `~/Passwords/HomePasswords.kdbx`, push in-place with `rclone copyto ~/Passwords/HomePasswords.kdbx gdrive:Passwords/HomePasswords.kdbx`, remove any extra Drive copies, run `kdbx-sync --resync`, and resume the systemd units.
 
 ---
 
-## Recent Changes (2026-11-13 to 2026-11-22)
+## Recent Changes (2026-11-13 to 2026-11-23)
 
 ### Dotfiles & Config (`chezmoi`)
 
@@ -157,6 +170,8 @@ journalctl --user -u kdbx-sync.service -u kdbx-sync-watch.service   # View sync 
   - Added `pi` package configuration (`dot_pi/agent/settings.json`).
 - **2026-11-22:**
   - Added KeePassXC + Google Drive `rclone bisync` script (`dot_local/bin/executable_kdbx-sync`), single-file filter (`dot_config/rclone/kdbx-bisync-filters.txt`), and `systemd --user` timer + save watcher units (`dot_config/systemd/user/kdbx-sync*`).
+- **2026-11-23:**
+  - Moved `kdbx-sync` remote target from `gdrive:` (root) to `gdrive:Passwords` and updated filter comments and `README.md` with multi-device, pause/resume, and merge recovery documentation.
 
 ### OS Packages (`pacman`)
 
