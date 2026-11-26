@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=RDP Bullit
+Comment=Connect to Bullit via RDP
+Exec=/home/scetrov/scripts/rdp-bullit.sh
+Icon=preferences-desktop-remote-desktop
+Terminal=false
+Categories=Network;RemoteAccess;
+Keywords=rdp;remote;desktop;bullit;xfreerdp;
+StartupNotify=true

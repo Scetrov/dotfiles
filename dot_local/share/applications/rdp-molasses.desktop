@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=RDP Molasses
+Comment=Connect to Molasses via RDP
+Exec=/home/scetrov/scripts/rdp-molasses.sh
+Icon=preferences-desktop-remote-desktop
+Terminal=false
+Categories=Network;RemoteAccess;
+Keywords=rdp;remote;desktop;molasses;xfreerdp;
+StartupNotify=true
